@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rsync -av /mnt/code/ /parsec-3.0
+/parsec-3.0/bin/parsecmgmt "$@"
