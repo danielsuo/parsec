@@ -6,5 +6,4 @@ then
   dockerfile=dev
 fi
 
-cp .gitignore .dockerignore
 sudo docker build -t danielsuo/parsec:latest -f ./dockerfile/$dockerfile .
