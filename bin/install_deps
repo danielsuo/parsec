@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+sudo apt-get update && sudo apt-get install -y \
+  build-essential \
+  wget \
+  m4 \
+  libx11-dev \
+  libxtst-dev \
+  libxt-dev \
+  libxmu-headers \
+  libxmu-dev \
+  libtbb-dev \
+  pkg-config \
+  gettext \
+  x11proto-xext-dev \
+  libglu1-mesa-dev

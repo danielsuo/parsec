@@ -2,7 +2,7 @@
 inputs
 parsec-3.0-data*
 
-inst*
+inst
 obj*
 doc*
 

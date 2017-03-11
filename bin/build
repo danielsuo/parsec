@@ -6,4 +6,4 @@ then
   dockerfile=dev
 fi
 
-sudo docker build -t danielsuo/parsec:latest -f ./dockerfile/$dockerfile .
+sudo docker build -t danielsuo/parsec:$dockerfile -f ./dockerfile/$dockerfile .
