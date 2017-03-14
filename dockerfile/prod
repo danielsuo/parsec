@@ -1,9 +1,7 @@
 FROM ubuntu
 
 # Update and install dependencies
-RUN apt-get update
-
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
   build-essential \
   wget \
   m4 \
@@ -17,7 +15,7 @@ RUN apt-get install -y \
   gettext \
   x11proto-xext-dev \
   libglu1-mesa-dev \
-  time
+  rsync
 
 ################################################################################
 # For parsec-3.0

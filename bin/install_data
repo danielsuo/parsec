@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+wget http://parsec.cs.princeton.edu/download/3.0-data/parsec-3.0-data.tar.gz
+tar zxvf parsec-3.0-data.tar.gz
+cp -R parsec-3.0-data/* .
+rsync -av parsec-3.0-data/* .
+rm -rf parsec-3.0-data*

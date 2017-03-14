@@ -3,3 +3,10 @@ inputs
 parsec-3.0-data*
 
 build
+inst
+obj*
+doc*
+
+*~
+*log
+*cache

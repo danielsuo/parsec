@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /mnt/code
+rsync -av --exclude-from=.dockerdevignore . /parsec-3.0
+cd /parsec-3.0
+/parsec-3.0/bin/parsecmgmt "$@"
