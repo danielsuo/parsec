@@ -46,6 +46,7 @@ RUN cp -R parsec-3.0-data/* .
 RUN rm -rf parsec-3.0-data*
 
 # RUN ./bin/parsecmgmt -a build -p all
+# RUN ./bin/parsecmgmt -a build -p splash2
 
 # ENTRYPOINT ["./bin/parsecmgmt"]
 
