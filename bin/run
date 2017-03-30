@@ -3,7 +3,7 @@
 sudo docker run --rm -it \
   -v $(pwd):/mnt/code \
   --entrypoint /mnt/code/bin/startup \
-  danielsuo/parsec "$@"
+  danielsuo/parsec:dev "$@"
 
 # ./bin/compile
 

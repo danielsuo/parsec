@@ -1,0 +1,46 @@
+FROM ubuntu
+
+# Update and install dependencies
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  wget \
+  m4 \
+  libx11-dev \
+  libxtst-dev \
+  libxt-dev \
+  libxmu-headers \
+  libxmu-dev \
+  libtbb-dev \
+  pkg-config \
+  gettext \
+  x11proto-xext-dev \
+  libglu1-mesa-dev \
+  rsync
+
+################################################################################
+# For parsec-3.0
+################################################################################
+# RUN wget http://parsec.cs.princeton.edu/download/3.0/parsec-3.0.tar.gz
+# RUN tar zxvf parsec-3.0.tar.gz
+# RUN rm parsec-3.0.tar.gz
+# WORKDIR /parsec-3.0
+
+# Make two fixes (https://yulistic.gitlab.io/2016/05/parsec-3.0-installation-issues/)
+# RUN sed -i "100,106 s/^/\/\//" ./pkgs/libs/uptcpip/src/include/sys/bsd__types.h
+# RUN grep -rl "=item [0-9]" * | xargs sed -i "s/=item \([0-9]\)/=item C<\1>/g"
+
+################################################################################
+# For https://github.com/danielsuo/parsec
+# NOTE: incorporated two fixes above
+################################################################################
+COPY . /parsec-3.0
+WORKDIR /parsec-3.0
+
+RUN wget http://parsec.cs.princeton.edu/download/3.0-data/parsec-3.0-data.tar.gz
+RUN tar zxvf parsec-3.0-data.tar.gz
+RUN rsync -av parsec-3.0-data/* .
+RUN rm -rf parsec-3.0-data*
+
+RUN ./bin/parsecmgmt -a build -p all
+
+ENTRYPOINT ["./bin/parsecmgmt"]
