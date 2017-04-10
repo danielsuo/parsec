@@ -173,26 +173,27 @@ int x264_cqm_init( x264_t *h )
     return 0;
 }
 
+// TODO: understand why there's a double free here. For now just leak since this is only called at application end.
 void x264_cqm_delete( x264_t *h )
 {
-    int i, j;
-    for( i = 0; i < 6; i++ )
-    {
-        for( j = 0; j < i; j++ )
-            if( h->quant4_mf[i] == h->quant4_mf[j] )
-                break;
-        if( j == i )
-        {
-            // x264_free( h->  quant4_mf[i] );
-            x264_free( h->dequant4_mf[i] );
-            x264_free( h->unquant4_mf[i] );
-        }
-        for( j = 0; j < i; j++ )
-            if( h->quant4_bias[i] == h->quant4_bias[j] )
-                break;
-        if( j == i )
-            x264_free( h->quant4_bias[i] );
-    }
+    // int i, j;
+    // for( i = 0; i < 6; i++ )
+    // {
+    //     for( j = 0; j < i; j++ )
+    //         if( h->quant4_mf[i] == h->quant4_mf[j] )
+    //             break;
+    //     if( j == i )
+    //     {
+    //         x264_free( h->  quant4_mf[i] );
+    //         x264_free( h->dequant4_mf[i] );
+    //         x264_free( h->unquant4_mf[i] );
+    //     }
+    //     for( j = 0; j < i; j++ )
+    //         if( h->quant4_bias[i] == h->quant4_bias[j] )
+    //             break;
+    //     if( j == i )
+    //         x264_free( h->quant4_bias[i] );
+    // }
 }
 
 static int x264_cqm_parse_jmlist( x264_t *h, const char *buf, const char *name,
