@@ -1,28 +1,4 @@
 #!/usr/bin/env bash
 
 sudo docker run --rm -it \
-  -v $(pwd):/mnt/code \
-  --entrypoint /mnt/code/bin/startup \
-  danielsuo/parsec:dev "$@"
-
-# ./bin/compile
-
-# actor=$1
-# if [[ -z $actor || $actor == "server" ]]
-# then
-#   sudo docker run --rm -it \
-#     -p 80:2375 \
-#     -v /var/run/docker.sock:/var/run/docker.sock \
-#     -v $(pwd):/server \
-#     -v /dev/shm:/dev/shm \
-#     --ipc=host \
-#     --entrypoint /server/build/turkey \
-#     turkey $actor
-# else
-#   sudo docker run --rm -it \
-#     -v $(pwd):/server \
-#     -v /dev/shm:/dev/shm \
-#     --ipc=host \
-#     --entrypoint /server/build/turkey \
-#     turkey $actor
-# fi
+  danielsuo/parsec:prod "$@"

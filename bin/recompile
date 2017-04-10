@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+./bin/parsecmgmt -a fullclean -p $1
+./bin/parsecmgmt -a fulluninstall -p $1
+./bin/parsecmgmt -a build -p $1

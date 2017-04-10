@@ -183,7 +183,7 @@ void x264_cqm_delete( x264_t *h )
                 break;
         if( j == i )
         {
-            x264_free( h->  quant4_mf[i] );
+            // x264_free( h->  quant4_mf[i] );
             x264_free( h->dequant4_mf[i] );
             x264_free( h->unquant4_mf[i] );
         }
@@ -268,4 +268,3 @@ int x264_cqm_parse_file( x264_t *h, const char *filename )
     x264_free( buf );
     return b_error;
 }
-

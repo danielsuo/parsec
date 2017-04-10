@@ -6,7 +6,9 @@ build
 inst
 obj*
 doc*
+tmp
 
 *~
 *log
 *cache
+run
