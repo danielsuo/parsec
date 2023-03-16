@@ -62,7 +62,7 @@
 
 
 //The configuration block defined in main
-config_t * conf;
+extern config_t * conf;
 
 //Hash table data structure & utility functions
 struct hashtable *cache;
