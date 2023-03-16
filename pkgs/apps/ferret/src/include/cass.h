@@ -12,6 +12,10 @@
 extern "C" {
 #endif
 
+#ifndef HUGE
+#define HUGE           3.40282347e+38F
+#endif
+
 
 extern void __debug (const char *, int, const char *, const char *, ...);
 
