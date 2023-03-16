@@ -19,7 +19,7 @@
 
 namespace threads {
 
-RWLock::RWLock() throw(RWLockException) {
+RWLock::RWLock() {
   int rv;
 
   rv = pthread_rwlock_init(&l, NULL);
@@ -30,29 +30,23 @@ RWLock::RWLock() throw(RWLockException) {
     case EAGAIN:
     case ENOMEM:
     {
-      RWLockResourceException e;
-      throw e;
       break;
     }
     case EPERM:
     case EBUSY:
     case EINVAL:
     {
-      RWLockInitException e;
-      throw e;
       break;
     }
     default:
     {
-      RWLockUnknownException e;
-      throw e;
       break;
     }
   }
 
 }
 
-RWLock::~RWLock() throw(RWLockException) {
+RWLock::~RWLock() {
   int rv;
 
   rv = pthread_rwlock_destroy(&l);
@@ -63,21 +57,17 @@ RWLock::~RWLock() throw(RWLockException) {
     case EBUSY:
     case EINVAL:
     {
-      RWLockDestroyException e;
-      throw e;
       break;
     }
     default:
     {
-      RWLockUnknownException e;
-      throw e;
       break;
     }
   }
 }
 
 //Enter a critical region for reading
-void RWLock::ReadLock() throw(RWLockException) {
+void RWLock::ReadLock() {
   int rv;
 
   rv = pthread_rwlock_rdlock(&l);
@@ -89,27 +79,21 @@ void RWLock::ReadLock() throw(RWLockException) {
     case EINVAL:
     case EAGAIN:
     {
-      RWLockLockingException e;
-      throw e;
       break;
     }
     case EDEADLK:
     {
-      RWLockDeadlockException e;
-      throw e;
       break;
     }
     default:
     {
-      RWLockUnknownException e;
-      throw e;
       break;
     }
   }
 }
 
 //Try to acquire the lock for reading, return true if successful
-bool RWLock::TryReadLock() throw(RWLockException) {
+bool RWLock::TryReadLock() {
   int rv;
 
   rv = pthread_rwlock_tryrdlock(&l);
@@ -125,14 +109,10 @@ bool RWLock::TryReadLock() throw(RWLockException) {
     case EINVAL:
     case EAGAIN:
     {
-      RWLockLockingException e;
-      throw e;
       break;
     }
     default:
     {
-      RWLockUnknownException e;
-      throw e;
       break;
     }
   }
@@ -141,7 +121,7 @@ bool RWLock::TryReadLock() throw(RWLockException) {
 }
 
 //Enter a critical region for writing
-void RWLock::WriteLock() throw(RWLockException) {
+void RWLock::WriteLock() {
   int rv;
 
   rv = pthread_rwlock_wrlock(&l);
@@ -152,27 +132,21 @@ void RWLock::WriteLock() throw(RWLockException) {
       break;
     case EINVAL:
     {
-      RWLockLockingException e;
-      throw e;
       break;
     }
     case EDEADLK:
     {
-      RWLockDeadlockException e;
-      throw e;
       break;
     }
     default:
     {
-      RWLockUnknownException e;
-      throw e;
       break;
     }
   }
 }
 
 //Try to acquire the lock for writing, return true if successful
-bool RWLock::TryWriteLock() throw(RWLockException) {
+bool RWLock::TryWriteLock() {
   int rv;
 
   rv = pthread_rwlock_trywrlock(&l);
@@ -187,14 +161,10 @@ bool RWLock::TryWriteLock() throw(RWLockException) {
       break;
     case EINVAL:
     {
-      RWLockLockingException e;
-      throw e;
       break;
     }
     default:
     {
-      RWLockUnknownException e;
-      throw e;
       break;
     }
   }
@@ -203,7 +173,7 @@ bool RWLock::TryWriteLock() throw(RWLockException) {
 }
 
 //Leave a critical region
-void RWLock::Unlock() throw(RWLockException) {
+void RWLock::Unlock() {
   int rv;
 
   rv = pthread_rwlock_unlock(&l);
@@ -215,14 +185,10 @@ void RWLock::Unlock() throw(RWLockException) {
     case EINVAL:
     case EPERM:
     {
-      RWLockLockingException e;
-      throw e;
       break;
     }
     default:
     {
-      RWLockUnknownException e;
-      throw e;
       break;
     }
   }

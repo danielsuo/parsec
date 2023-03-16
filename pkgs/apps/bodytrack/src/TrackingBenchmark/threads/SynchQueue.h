@@ -22,12 +22,6 @@
 
 namespace threads {
 
-//General queue exception
-class SynchQueueException: public std::exception {
-  public:
-    const char *what() {return "Unspecified synchronization queue error";}
-};
-
 //capacity constant for queues with no maximum capacity
 #define SYNCHQUEUE_NOCAPACITY -1
 
@@ -64,10 +58,6 @@ SynchQueue<T>::SynchQueue() {
 
 template <typename T>
 SynchQueue<T>::SynchQueue(int _cap) {
-  if(_cap < 1) {
-    SynchQueueException e;
-    throw e;
-  }
 
   cap = _cap;
   M = new Mutex;

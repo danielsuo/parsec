@@ -28,10 +28,6 @@ namespace threads{
 
 //constructor
 WorkerGroup::WorkerGroup(int nThreads) : cmd(THREADS_IDLE), workAvailable(workDispatch) {
-  if(nThreads < 1) {
-    WorkerGroupException e;
-    throw e;
-  }
   
   workDoneBarrier = new threads::Barrier(nThreads);
   poolReadyBarrier = new threads::Barrier(nThreads + 1);
@@ -47,14 +43,6 @@ WorkerGroup::~WorkerGroup() {
 
 //Add a new command
 void WorkerGroup::RegisterCmd(int _cmd, Threadable &obj) {
-  if(_cmd < 0) {
-    WorkerGroupCommandRangeException e;
-    throw e;
-  }
-  if(_cmd > USHRT_MAX) {
-    WorkerGroupCommandRangeException e;
-    throw e;
-  }
   RegisterCmd((thread_cmd_t)_cmd, obj);
 }
 
@@ -80,15 +68,6 @@ void WorkerGroup::SendInternalCmd(thread_internal_cmd_t _cmd) {
 
 //Send a command to all worker threads
 void WorkerGroup::SendCmd(thread_cmd_t _cmd) {
-  if(_cmd >= cmds.size()) {
-    WorkerGroupCommandException e;
-    throw e;
-  }
-  if(cmds[_cmd] == NULL) {
-    WorkerGroupCommandException e;
-    throw e;
-  }
-
   SendInternalCmd((thread_internal_cmd_t)_cmd);
 }
 
@@ -139,8 +118,6 @@ void WorkerGroup::Run() {
     switch(cmd) {
       case THREADS_IDLE:
       {
-        WorkerGroupException e;
-        throw e;
         break;
       }
       case THREADS_SHUTDOWN:

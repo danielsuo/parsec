@@ -25,7 +25,7 @@
 
 namespace threads {
 
-Condition::Condition(Mutex &_M) throw(CondException) {
+Condition::Condition(Mutex &_M) {
   int rv;
 
   M = &_M;
@@ -43,21 +43,15 @@ Condition::Condition(Mutex &_M) throw(CondException) {
     case EAGAIN:
     case ENOMEM:
     {
-      CondResourceException e;
-      throw e;
       break;
     }
     case EBUSY:
     case EINVAL:
     {
-      CondInitException e;
-      throw e;
       break;
     }
     default:
     {
-      CondUnknownException e;
-      throw e;
       break;
     }
   }
@@ -67,14 +61,10 @@ Condition::Condition(Mutex &_M) throw(CondException) {
   genCounter = 0;
 
   c = CreateEvent(NULL, true, false, NULL);
-  if(c == 0) {
-    CondInitException e;
-    throw e;
-  }
 #endif //HAVE_LIBPTHREAD
 }
 
-Condition::~Condition() throw(CondException) {
+Condition::~Condition() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -87,14 +77,10 @@ Condition::~Condition() throw(CondException) {
     case EBUSY:
     case EINVAL:
     {
-      CondDestroyException e;
-      throw e;
       break;
     }
     default:
     {
-      CondUnknownException e;
-      throw e;
       break;
     }
   }
@@ -102,16 +88,12 @@ Condition::~Condition() throw(CondException) {
   int rv;
 
   rv = CloseHandle(c);
-  if(rv == 0) {
-    CondDestroyException e;
-    throw e;
-  }
 #endif //HAVE_LIBPTHREAD
 }
 
 //Wake up exactly one thread, return number of threads currently waiting (before wakeup)
 //If no more threads are waiting, the notification is lost
-int Condition::NotifyOne() throw(CondException) {
+int Condition::NotifyOne() {
 #if defined(HAVE_LIBPTHREAD)
   int slack;
   int rv;
@@ -127,14 +109,10 @@ int Condition::NotifyOne() throw(CondException) {
         break;
       case EINVAL:
       {
-        CondException e;
-        throw e;
         break;
       }
       default:
       {
-        CondUnknownException e;
-        throw e;
         break;
       }
     }
@@ -155,7 +133,7 @@ int Condition::NotifyOne() throw(CondException) {
 }
 
 //Wake up all threads, return number of threads currently waiting (before wakeup)
-int Condition::NotifyAll() throw(CondException) {
+int Condition::NotifyAll() {
 #if defined(HAVE_LIBPTHREAD)
   int slack;
   int rv;
@@ -171,14 +149,10 @@ int Condition::NotifyAll() throw(CondException) {
         break;
       case EINVAL:
       {
-        CondException e;
-        throw e;
         break;
       }
       default:
       {
-        CondUnknownException e;
-        throw e;
         break;
       }
     }
@@ -199,7 +173,7 @@ int Condition::NotifyAll() throw(CondException) {
 }
 
 //Wait until either NotifyOne() or NotifyAll() is executed
-void Condition::Wait() throw(CondException, MutexException) {
+void Condition::Wait() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -215,20 +189,14 @@ void Condition::Wait() throw(CondException, MutexException) {
         break;
       case EINVAL:
       {
-        CondException e;
-        throw e;
         break;
       }
       case EPERM:
       {
-        MutexLockingException e;
-        throw e;
         break;
       }
       default:
       {
-        CondUnknownException e;
-        throw e;
         break;
       }
     }

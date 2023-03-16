@@ -28,23 +28,6 @@ typedef unsigned short int thread_cmd_t;
 //worker threads have a unique rank which which starts with 0
 typedef unsigned int thread_rank_t;
 
-//General group exception
-class WorkerGroupException: public std::exception {
-  public:
-    virtual const char *what() const throw() {return "Unspecified worker group exception";}
-};
-
-//General group exception
-class WorkerGroupCommandException: public WorkerGroupException {
-  public:
-    virtual const char *what() const throw() {return "Illegal command exception";}
-};
-
-//General group exception
-class WorkerGroupCommandRangeException: public WorkerGroupCommandException {
-  public:
-    virtual const char *what() const throw() {return "Command out of range";}
-};
 
 class Threadable {
   public:

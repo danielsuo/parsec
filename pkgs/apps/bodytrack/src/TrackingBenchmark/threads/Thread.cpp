@@ -48,17 +48,13 @@ extern "C" {
 
 
 //Constructor, expects a threadable object as argument
-Thread::Thread(Runnable &_tobj) throw(ThreadCreationException) : tobj(_tobj) {
+Thread::Thread(Runnable &_tobj) : tobj(_tobj) {
 #if defined(HAVE_LIBPTHREAD)
   if(pthread_create(&t, NULL, &thread_entry, (void *)&tobj)) {
-    ThreadCreationException e;
-    throw e;
   }
 #else //default: winthreads
   t = (void *)_beginthreadex(NULL, 0, &thread_entry, (void *)&tobj, 0, &t_id);
   if(!t) {
-    ThreadCreationException e;
-    throw e;
   }
 #endif //HAVE_LIBPTHREAD
 }

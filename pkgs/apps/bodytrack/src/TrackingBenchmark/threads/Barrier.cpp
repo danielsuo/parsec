@@ -25,7 +25,7 @@
 
 namespace threads {
 
-Barrier::Barrier(int _n) throw(BarrierException) {
+Barrier::Barrier(int _n) {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -38,21 +38,15 @@ Barrier::Barrier(int _n) throw(BarrierException) {
     case EINVAL:
     case EBUSY:
     {
-      BarrierInitException e;
-      throw e;
       break;
     }
     case EAGAIN:
     case ENOMEM:
     {
-      BarrierResourceException e;
-      throw e;
       break;
     }
     default:
     {
-      BarrierUnknownException e;
-      throw e;
       break;
     }
   }
@@ -66,7 +60,7 @@ Barrier::Barrier(int _n) throw(BarrierException) {
 #endif //HAVE_LIBPTHREAD
 }
 
-Barrier::~Barrier() throw(BarrierException) {
+Barrier::~Barrier() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -78,14 +72,10 @@ Barrier::~Barrier() throw(BarrierException) {
     case EINVAL:
     case EBUSY:
     {
-      BarrierDestroyException e;
-      throw e;
       break;
     }
     default:
     {
-      BarrierUnknownException e;
-      throw e;
       break;
     }
   }
@@ -97,7 +87,7 @@ Barrier::~Barrier() throw(BarrierException) {
 }
 
 //Wait at a barrier
-bool Barrier::Wait() throw(BarrierException) {
+bool Barrier::Wait() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -111,14 +101,10 @@ bool Barrier::Wait() throw(BarrierException) {
       break;
     case EINVAL:
     {
-      BarrierException e;
-      throw e;
       break;
     }
     default:
     {
-      BarrierUnknownException e;
-      throw e;
       break;
     }
   }

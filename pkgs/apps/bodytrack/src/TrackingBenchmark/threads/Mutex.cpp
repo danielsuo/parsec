@@ -24,7 +24,7 @@
 
 namespace threads {
 
-Mutex::Mutex() throw(MutexException) {
+Mutex::Mutex() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -36,22 +36,16 @@ Mutex::Mutex() throw(MutexException) {
     case EAGAIN:
     case ENOMEM:
     {
-      MutexResourceException e;
-      throw e;
       break;
     }
     case EPERM:
     case EBUSY:
     case EINVAL:
     {
-      MutexInitException e;
-      throw e;
       break;
     }
     default:
     {
-      MutexUnknownException e;
-      throw e;
       break;
     }
   }
@@ -60,7 +54,7 @@ Mutex::Mutex() throw(MutexException) {
 #endif //HAVE_LIBPTHREAD
 }
 
-Mutex::~Mutex() throw(MutexException) {
+Mutex::~Mutex() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -72,14 +66,10 @@ Mutex::~Mutex() throw(MutexException) {
     case EBUSY:
     case EINVAL:
     {
-      MutexDestroyException e;
-      throw e;
       break;
     }
     default:
     {
-      MutexUnknownException e;
-      throw e;
       break;
     }
   }
@@ -89,7 +79,7 @@ Mutex::~Mutex() throw(MutexException) {
 }
 
 //Enter a critical region
-void Mutex::Lock() throw(MutexException) {
+void Mutex::Lock() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -102,20 +92,14 @@ void Mutex::Lock() throw(MutexException) {
     case EINVAL:
     case EAGAIN:
     {
-      MutexLockingException e;
-      throw e;
       break;
     }
     case EDEADLK:
     {
-      MutexDeadlockException e;
-      throw e;
       break;
     }
     default:
     {
-      MutexUnknownException e;
-      throw e;
       break;
     }
   }
@@ -125,7 +109,7 @@ void Mutex::Lock() throw(MutexException) {
 }
 
 //Try to acquire the lock, return true if successful
-bool Mutex::TryLock() throw(MutexException) {
+bool Mutex::TryLock() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -142,14 +126,10 @@ bool Mutex::TryLock() throw(MutexException) {
     case EINVAL:
     case EAGAIN:
     {
-      MutexLockingException e;
-      throw e;
       break;
     }
     default:
     {
-      MutexUnknownException e;
-      throw e;
       break;
     }
   }
@@ -161,7 +141,7 @@ bool Mutex::TryLock() throw(MutexException) {
 }
 
 //Leave a critical region
-void Mutex::Unlock() throw(MutexException) {
+void Mutex::Unlock() {
 #if defined(HAVE_LIBPTHREAD)
   int rv;
 
@@ -175,14 +155,10 @@ void Mutex::Unlock() throw(MutexException) {
     case EAGAIN:
     case EPERM:
     {
-      MutexLockingException e;
-      throw e;
       break;
     }
     default:
     {
-      MutexUnknownException e;
-      throw e;
       break;
     }
   }

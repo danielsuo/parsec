@@ -28,7 +28,6 @@ namespace threads {
 //The thread class constructor requires a threadable object to instantiate a thread object
 class Runnable {
   public:
-    virtual ~Runnable() {};
     //Thread objects will call the Run() method of its associated Runnable class
     virtual void Run() =0;
 };
@@ -42,12 +41,6 @@ class Stoppable {
     virtual void Stop() =0;
 };
 
-//Exception which gets thrown if thread creation fails
-class ThreadCreationException: public std::exception {
-  public:
-    virtual const char *what() const throw() {return "Error creating thread";}
-};
-
 //A thread
 class Thread {
   private:
@@ -59,7 +52,7 @@ class Thread {
     unsigned int t_id;
 #endif //HAVE_LIBPTHREAD
   public:
-    Thread(Runnable &) throw(ThreadCreationException);
+    Thread(Runnable &);
 
     //Wait until Thread object has finished
     void Join();
