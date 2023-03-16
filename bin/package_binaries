@@ -1,8 +1,29 @@
 #!/usr/bin/env bash
 
-echo 'This script requires `git` and `wget`.'
+sudo apt-get update && apt-get install -y \
+  build-essential \
+  git \
+  wget \
+  m4 \
+  libx11-dev \
+  libxtst-dev \
+  libxt-dev \
+  libxmu-headers \
+  libxmu-dev \
+  libtbb-dev \
+  pkg-config \
+  gettext \
+  x11proto-xext-dev \
+  libglu1-mesa-dev \
+  rsync
 
-# Clone parsec-3.0 source
+# Download original parsec-3.0 with all data inputs
+wget http://parsec.cs.princeton.edu/download/3.0/parsec-3.0.tar.gz
+tar zxvf parsec-3.0.tar.gz
+rm parsec-3.0.tar.gz
+mv parsec-3.0 parsec-3.0-data
+
+# Clone patched parsec-3.0 source
 git clone https://github.com/danielsuo/parsec parsec-3.0
 
 # Download and unpack parsec-2.1 binaries
@@ -38,7 +59,7 @@ mkdir -p parsec-3.0-stripped
 find parsec-3.0/pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v libs/ | grep -v tools/ | xargs -I {} cp --parents "{}" parsec-3.0-stripped
 
 # Copy data
-find parsec-3.0/pkgs | grep "input.*tar" | xargs -I {} cp --parents "{}" parsec-3.0-stripped
+find parsec-3.0-data/pkgs | grep "input.*tar" | xargs -I {} cp --parents "{}" parsec-3.0-stripped
 
 # Copy configs
 find parsec-3.0 | grep runconf | grep -v config/ | grep -v man/ | grep -v ext/ | xargs -I {} cp --parent "{}" parsec-3.0-stripped
