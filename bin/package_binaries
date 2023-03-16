@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+echo 'This script requires `git` and `wget`.'
+
+# Clone parsec-3.0 source
+git clone https://github.com/danielsuo/parsec parsec-3.0
+
+# Download and unpack parsec-2.1 binaries
+wget http://parsec.cs.princeton.edu/download/2.1/binaries/parsec-2.1-amd64-linux.tar.gz
+tar zxvf parsec-2.1-amd64-linux.tar.gz
+rm parsec-2.1-amd64-linux.tar.gz
+
+# Download and prepare Magic Ermine Pro
+wget http://www.magicermine.com/trial/ErmineProTrial.x86_64/ErmineProTrial.x86_64/ErmineProTrial.x86_64
+chmod +x ErmineProTrial.x86_64
+
+# Build
+pushd parsec-3.0
+./bin/parsecmgmt -a build -p parsec
+popd
+
+# Copy x264 from parsec-2.1
+cp ~/parsec-2.1/pkgs/apps/x264/inst/amd64-linux.gcc-pthreads.pre/bin/x264 ~/parsec-3.0/pkgs/apps/x264/inst/amd64-linux.gcc/bin/x264
+
+# Backup executables
+find parsec-3.0/pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v libs/ | grep -v tools/ | xargs -I {} cp "{}" "{}".bak
+
+# Use Ermine to package up shared libraries
+find parsec-3.0/pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v libs/ | grep -v tools/ | grep -v bak | xargs -I {} ~/ErmineProTrial.x86_64 "{}".bak --output "{}"
+
+# Clean up (keep backups)
+# find parsec-3.0/pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v libs/ | grep -v tools/ | grep -v bak | xargs rm
+
+# Move relevant files
+mkdir -p parsec-3.0-stripped
+
+# Copy binaries
+find parsec-3.0/pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v libs/ | grep -v tools/ | xargs -I {} cp --parents "{}" parsec-3.0-stripped
+
+# Copy data
+find parsec-3.0/pkgs | grep "input.*tar" | xargs -I {} cp --parents "{}" parsec-3.0-stripped
+
+# Copy configs
+find parsec-3.0 | grep runconf | grep -v config/ | grep -v man/ | grep -v ext/ | xargs -I {} cp --parent "{}" parsec-3.0-stripped
+
+# Copy global configs
+cp -R parsec-3.0/config parsec-3.0-stripped
+
+# Copy scripts
+cp -R parsec-3.0/bin parsec-3.0-stripped
+
+# Clean up
+mv parsec-3.0-stripped/parsec-3.0/* parsec-3.0-stripped
+rm -rf parsec-3.0-stripped/parsec-3.0
+
+# Package
+tar czvf parsec-3.0-stripped.tar.gz parsec-3.0-stripped/
