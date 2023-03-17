@@ -40,8 +40,10 @@ pushd parsec-3.0-core
 ./bin/parsecmgmt -a build -p parsec
 popd
 
-# Copy x264 from parsec-2.1
-cp ~/parsec-2.1/pkgs/apps/x264/inst/amd64-linux.gcc-pthreads.pre/bin/x264 ~/parsec-3.0-core/pkgs/apps/x264/inst/amd64-linux.gcc/bin/x264
+# Overwrite some binaries from parsec-2.1
+cp parsec-2.1/pkgs/apps/x264/inst/amd64-linux.gcc-pthreads.pre/bin/x264 parsec-3.0-core/pkgs/apps/x264/inst/amd64-linux.gcc/bin/x264
+cp parsec-2.1/pkgs/kernels/canneal/inst/amd64-linux.gcc-pthreads.pre/bin/canneal parsec-3.0-core/pkgs/kernels/canneal/inst/amd64-linux.gcc/bin/canneal
+cp parsec-2.1/pkgs/apps/facesim/inst/amd64-linux.gcc-pthreads.pre/bin/facesim parsec-3.0-core/pkgs/apps/facesim/inst/amd64-linux.gcc/bin/facesim
 
 # Backup executables
 find parsec-3.0-core/pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v libs/ | grep -v tools/ | xargs -I {} cp "{}" "{}".bak
@@ -55,14 +57,16 @@ find parsec-3.0-core/pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v 
 # Move relevant files
 mkdir -p parsec-3.0
 
-# Copy binaries
-find parsec-3.0-core/pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v libs/ | grep -v tools/ | xargs -I {} cp --parents "{}" parsec-3.0
+# Copy binaries and configs
+pushd parsec-3.0-core
+find pkgs -type f -perm /a+x | grep amd64 | grep bin/ | grep -v libs/ | grep -v tools/ | xargs -I {} cp --parents "{}" ../parsec-3.0
+find . -type f | grep runconf | grep -v config/ | grep -v man/ | grep -v ext/ | xargs -I {} cp --parent "{}" ../parsec-3.0
+popd
 
 # Copy data
-find parsec-3.0-data/pkgs | grep "input.*tar" | xargs -I {} cp --parents "{}" parsec-3.0
-
-# Copy configs
-find parsec-3.0-core | grep runconf | grep -v config/ | grep -v man/ | grep -v ext/ | xargs -I {} cp --parent "{}" parsec-3.0
+pushd parsec-3.0-data
+find pkgs | grep "input.*tar" | xargs -I {} cp --parents "{}" ../parsec-3.0
+popd
 
 # Copy global configs
 cp -R parsec-3.0-core/config parsec-3.0
@@ -70,9 +74,8 @@ cp -R parsec-3.0-core/config parsec-3.0
 # Copy scripts
 cp -R parsec-3.0-core/bin parsec-3.0
 
-# Clean up
-mv parsec-3.0/parsec-3.0-core/* parsec-3.0
-rm -rf parsec-3.0/parsec-3.0-core
+# Copy other files
+cp parsec-3.0-core/.parsec_uniquefile parsec-3.0-core/version parsec-3.0
 
 # Package
 tar czvf parsec-3.0.tar.gz parsec-3.0/
