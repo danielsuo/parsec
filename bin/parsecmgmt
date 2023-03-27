@@ -84,6 +84,15 @@ oprefix="[PARSEC]"
 #                                                               #
 #################################################################
 
+# time_ns
+# time in nano seconds
+function time_ns {
+  ts=$(date +%s%N)
+  $1
+  tt=$((($(date +%s%N) - $ts)))
+  echo "time_ns: $tt nanoseconds";
+}
+
 # parsec_init
 #
 # Initialize the script
@@ -603,21 +612,6 @@ Examples (3) [NEW: SPLASH-2 Suite and SPLASH-2x Suite]:
             fi;;
           "SUBMIT" )
             parsemode="none"
-            # Check whether specified program exists
-            cmd=$(echo "${arg}" | awk '{print $1}')
-            if [ ! -e "${cmd}" ]; then
-              # Check whether program is in path and give it a second try
-              cmd=$(which ${cmd}); rv=$?
-              if [ ! $rv -eq 0 ]; then
-                echo "${oprefix} Error: Cannot find file '${arg}'."
-                exit 1
-              fi
-            fi
-            # Check whether specified file is executable
-            if [ ! -x "${cmd}" ]; then
-              echo "${oprefix} Error: '${arg}' is not executable."
-              exit 1
-            fi
             submit="${arg}";;
           "EXTENSION" )
             parsemode="none"
