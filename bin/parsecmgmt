@@ -88,7 +88,7 @@ oprefix="[PARSEC]"
 # time in nano seconds
 function time_ns {
   ts=$(date +%s%N)
-  $1
+  $@
   tt=$((($(date +%s%N) - $ts)))
   echo "time_ns: $tt nanoseconds";
 }
